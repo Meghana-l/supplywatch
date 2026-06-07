@@ -24,12 +24,15 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    console.log('Groq raw response:', JSON.stringify(data));
+
     const text = data.choices?.[0]?.message?.content || '';
 
     res.status(200).json({
       content: [{ type: 'text', text }]
     });
   } catch (err) {
+    console.log('Error:', err.message);
     res.status(500).json({ error: 'Analysis failed', detail: err.message });
   }
 }
