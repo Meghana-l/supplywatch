@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.GROQ_KEY}`
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         messages: [{ role: 'user', content: userMessage }],
         max_tokens: 800,
         temperature: 0.3
@@ -24,15 +24,12 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    console.log('Groq raw response:', JSON.stringify(data));
-
     const text = data.choices?.[0]?.message?.content || '';
 
     res.status(200).json({
       content: [{ type: 'text', text }]
     });
   } catch (err) {
-    console.log('Error:', err.message);
     res.status(500).json({ error: 'Analysis failed', detail: err.message });
   }
 }
